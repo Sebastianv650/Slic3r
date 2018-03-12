@@ -37,11 +37,19 @@ public:
         void reset();
         bool empty() const;
         void update_from(float value);
+        void update_from(const Range& other);
         void set_from(const Range& other);
         float step_size() const;
 
         const Color& get_color_at(float value) const;
         const Color& get_color_at_max() const;
+    };
+
+    struct Ranges
+    {
+        Range height;
+        Range width;
+        Range feedrate;
     };
 
     struct LegendItem
@@ -71,13 +79,6 @@ public:
         static const std::string Default_Extrusion_Role_Names[Num_Extrusion_Roles];
         static const EViewType Default_View_Type;
 
-        struct Ranges
-        {
-            Range height;
-            Range width;
-            Range feedrate;
-        };
-
         struct Layer
         {
             float z;
@@ -91,7 +92,6 @@ public:
         EViewType view_type;
         Color role_colors[Num_Extrusion_Roles];
         std::string role_names[Num_Extrusion_Roles];
-        Ranges ranges;
         LayersList layers;
         unsigned int role_flags;
 
@@ -178,6 +178,7 @@ public:
     Retraction retraction;
     Retraction unretraction;
     Shell shell;
+    Ranges ranges;
 
     GCodePreviewData();
 
@@ -186,9 +187,9 @@ public:
     bool empty() const;
 
     const Color& get_extrusion_role_color(ExtrusionRole role) const;
-    const Color& get_extrusion_height_color(float height) const;
-    const Color& get_extrusion_width_color(float width) const;
-    const Color& get_extrusion_feedrate_color(float feedrate) const;
+    const Color& get_height_color(float height) const;
+    const Color& get_width_color(float width) const;
+    const Color& get_feedrate_color(float feedrate) const;
 
     void set_extrusion_role_color(const std::string& role_name, float red, float green, float blue, float alpha);
     void set_extrusion_paths_colors(const std::vector<std::string>& colors);
